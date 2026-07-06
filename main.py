@@ -30,10 +30,18 @@ def create_customer(
 
 @app.get('/customers')
 def get_customers(
+    name: str = None,
+    skip: int = 0,
+    limit: int = 10,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
-    return crud.get_customers(db)
+    return crud.get_customers(
+        db,
+        name,
+        skip,
+        limit
+    )
 
 @app.get('/customers/{customer_id}')
 def get_customer(
@@ -115,7 +123,7 @@ def get_device(
 @app.put('/devices/{device_id}')
 def update_device(
     device_id:int,device:schemas.DeviceUpdate,db:Session = Depends(get_db),
-     current_user: models.User = Depends(get_current_user)
+    current_user: models.User = Depends(get_current_user)
 ):
 
     
@@ -198,7 +206,7 @@ def update_repair(
 def delete_repair(
     
     repair_id:int,db:Session = Depends(get_db),
-     current_user: models.User = Depends(require_admin)
+    current_user: models.User = Depends(require_admin)
 ):
 
     deleted_repair = crud.delete_repair(db, repair_id)
@@ -214,7 +222,8 @@ def delete_repair(
 @app.post("/register")
 def register(
     user: schemas.UserCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
 ):
     existing_user = crud.get_user_by_email(db, user.email)
 

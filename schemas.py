@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from pydantic import BaseModel,EmailStr,Field
 
 class CustomerCreate(BaseModel):
@@ -12,14 +12,14 @@ class CustomerUpdate(BaseModel):
     phone:str 
     address:str
 
-class CustomerResponse(BaseModel):
-    id:int
-    name:str
-    phone:str
-    address:str
 
-    class Config:
-        from_attributes = True
+class CustomerResponse(BaseModel):
+    id: int
+    name: str
+    phone: str
+    address: str
+
+    model_config = ConfigDict(from_attributes=True)
 
 class DeviceCreate(BaseModel):
     device_name:str
@@ -46,9 +46,7 @@ class DeviceResponse(BaseModel):
     problem:str
     customer_id:int
 
-    class Config:
-        from_attributes = True
-
+model_config = ConfigDict(from_attributes=True)
 
 
 class RepairCreate(BaseModel):
@@ -79,8 +77,7 @@ class RepairResponse(BaseModel):
     delivered_date:str
     device_id:int
 
-    class Config:
-        from_attributes = True 
+model_config = ConfigDict(from_attributes=True)
 
 class UserCreate(BaseModel):
     username: str = Field(min_length=3, max_length=30)

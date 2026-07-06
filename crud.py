@@ -15,9 +15,20 @@ def create_customer(db: Session, customer: schemas.CustomerCreate):
     db.refresh(db_customer)
     return db_customer
 
+def get_customers(
+    db: Session,
+    name: str = None,
+    skip: int = 0,
+    limit: int = 10
+):
+    query = db.query(models.Customer)
 
-def get_customers(db: Session):
-    return db.query(models.Customer).all()
+    if name:
+        query = query.filter(
+            models.Customer.name.contains(name)
+        )
+
+    return query.offset(skip).limit(limit).all()
 
 def get_customer(db: Session,customer_id:int):
     return db.query(models.Customer).filter(
